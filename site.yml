@@ -1,0 +1,17 @@
+---
+- name: Common features for all systems
+  hosts: all
+  user: root
+  tasks:
+  - name: Update package
+    shell: apt-get update
+    when: ansible_os_family == "Debian"
+
+- name: Install iscsi target
+  hosts: iscsi-target
+  user: root
+  vars:
+     iscsi_target_base: org.example.2014-01
+  roles:
+#     - { role: common, tags: common }
+     - { role: iscsi-target, tags: iscsi-target }
