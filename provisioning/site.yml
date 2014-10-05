@@ -1,0 +1,33 @@
+---
+- name: Common features for all systems
+  hosts: iscsi-target
+  user: root
+  tasks:
+  - name: Update package
+    shell: apt-get update
+    when: ansible_os_family == "Debian"
+
+  - name: Create /iscsi directory
+    file: path=/iscsi state=directory
+
+- name: Install iscsi target
+  hosts: iscsi-target
+  user: root
+  vars:
+     iscsi_target_base: iqn.2014-10.org.example
+     iscsi_target_suffix: storage
+     iscsi_targets:
+         - mode: file
+           backing_store: /iscsi/small
+           name: small
+           size: 1GB
+           lun: 0
+           listen_on: 0.0.0.0
+           common_auth:
+              userid: foo
+              password: bar
+
+  roles:
+#     - { role: common, tags: common }
+     - { role: iscsi-target,
+         tags: iscsi-target }

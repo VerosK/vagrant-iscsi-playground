@@ -45,11 +45,12 @@ Vagrant.configure("2") do |config|
           end
 
           box.vm.provision :ansible do |ansible|
-            ansible.playbook = "site.yml"
+            ansible.playbook = "provisioning/site.yml"
             ansible.host_key_checking = false
             ansible.verbose = "v"
             ansible.groups = {
-            'iscsi-target' => MACHINES.keys
+                'iscsi-target' => MACHINES.keys,
+                'iscsi-initiator' => MACHINES.keys,
             }
             # if you want to fire ansible on all machines at parallel, use this!
             #ansible.limit = 'all'
